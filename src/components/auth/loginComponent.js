@@ -1,99 +1,77 @@
 import React, { useState } from 'react';
-import './login.styles.css';
-import { Button } from 'reactstrap';
-import { AvForm, AvField } from 'availity-reactstrap-validation';
+import { useForm } from 'react-hook-form';
+import Swal from 'sweetalert2';
 import { API_URL, Regex } from '../../constants/config';
 
 const Login = (props) => {
-  const [message, setMessage] = useState('');
-  const [values, setValues] = useState({});
-  const [loading] = useState(false);
+  const { register, handleSubmit, errors } = useForm();
+  const [loading, setLoading] = useState(false);
 
-  const handleChange = (event) => {
-    event.persist();
-    setValues({ ...values, [event.target.name]: event.target.value });
-  };
-
-  const handleSubmit = async (event, errors) => {
-    event.persist();
-    if (errors.length === 0) {
-      const res = await fetch(`${API_URL}/auth/login`, {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify(values),
-      });
-      const data = await res.json();
-      if (data.status === 200) {
-        setMessage('');
-        localStorage.setItem('accessToken', data.data.accessToken);
-        localStorage.setItem('userEmail', data.data.user.email);
-        localStorage.setItem('refreshToken', data.data.refreshToken);
-        props.history.push('/users');
-      } else if (data.status === 400 || data.status === 404) {
-        setMessage(data.message);
-        setInterval(() => {
-          setMessage('');
-        }, 5000);
-      }
+  const onSubmit = async (values) => {
+    setLoading(true);
+    console.log('values', values);
+    const res = await fetch(`${API_URL}/auth/login`, {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify(values),
+    });
+    const data = await res.json();
+    if (data.status === 200) {
+      localStorage.setItem('accessToken', data.data.accessToken);
+      localStorage.setItem('userEmail', data.data.user.email);
+      localStorage.setItem('refreshToken', data.data.refreshToken);
+      props.history.push('/users');
+    } else if (data.status === 401 || data.status === 404) {
+      Swal.fire('Oops...', data.message, 'error');
     }
   };
 
   return (
     <>
-      <div className="Login">
-        {message && <p className="error-style">{message}</p>}
-
-        <AvForm className="register-form" onSubmit={handleSubmit}>
-          <AvField
+      <div className="form-layout">
+        <form onSubmit={handleSubmit(onSubmit)} autoComplete="off">
+          <input
             name="email"
-            label="Email Address"
-            value={values.email || ''}
-            type="email"
-            onChange={handleChange}
-            autoComplete="off"
-            validate={{
+            type="text"
+            ref={register({
               required: {
                 value: true,
-                errorMessage: 'Please enter an email address',
+                message: 'Please enter an email address',
               },
               pattern: {
                 value: Regex.email,
-                errorMessage: 'Email address should be a valid email',
+                message: 'Email address must be a valid email',
               },
-            }}
+            })}
           />
-          <AvField
+          <span className="error-style">
+            {errors.email && errors.email.message}
+          </span>
+
+          <input
             name="password"
-            label="Password"
-            value={values.password || ''}
             type="password"
-            onChange={handleChange}
-            autoComplete="off"
-            validate={{
+            ref={register({
               required: {
                 value: true,
-                errorMessage: 'Please enter a password',
+                message: 'Please enter a password',
               },
-              minLength: {
-                value: 4,
-                errorMessage:
-                  'Your password must be between 4 and 16 characters',
+              pattern: {
+                value: Regex.password,
+                message: 'Password must be a valid',
               },
-              maxLength: {
-                value: 16,
-                errorMessage:
-                  'You password name must be between 6 and 16 characters',
-              },
-            }}
+            })}
           />
-
-          <Button className="primary-btn signup-btn">
+          <span className="error-style">
+            {errors.password && errors.password.message}
+          </span>
+          <button type="submit" className="primary-btn signup-btn">
             {loading ? 'Loading...' : 'Login'}{' '}
             <i className="material-icons right">send</i>
-          </Button>
-        </AvForm>
+          </button>
+        </form>
       </div>
     </>
   );

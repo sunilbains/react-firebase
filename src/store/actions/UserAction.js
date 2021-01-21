@@ -3,7 +3,6 @@ import { API_URL } from '../../constants/config';
 
 export const getUsers = () => async (dispatch) => {
   const rr = await getMethod(`${API_URL}/users`);
-  // console.log('ddd', rr);
 
   if (rr.status === 200) {
     return dispatch({ type: 'GET_USERS', payload: rr.data });
