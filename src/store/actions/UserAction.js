@@ -10,21 +10,7 @@ export const getUsers = () => async (dispatch) => {
   if (rr.status === 400 || rr.status === 500) {
     return dispatch({ type: 'GET_ERRORS', payload: rr });
   }
-
-  // fetch(`${API_URL}/users`, {
-  //   method: 'get',
-  //   headers: setAuthToken(localStorage.getItem('jwtToken')),
-  //   body: JSON.stringify({ _id: localStorage.getItem('userId'), ...data }),
-  // })
-  //   .then((res) => res.json())
-  //   .then((data) => {
-  //     if (data.status === 200) {
-  //       dispatch({ type: 'GET_USERS', payload: data });
-  //     }
-  //   })
-  //   .catch((err) => {
-  //     dispatch({ type: 'GET_ERROR', payload: err });
-  //   });
+  return true;
 };
 
 // // Get User

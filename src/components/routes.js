@@ -5,6 +5,7 @@ import { Switch, Route } from 'react-router';
 // import MyRequestsPage from '../friends/my-requests.component';
 import ListUsers from './users/ListUsers';
 import Login from './auth/loginComponent';
+import Dashboard from './Dashboard/dashboard';
 // import AddUserPage from '../users/add-user.component';
 // import AddUserFun from '../users/add-user-fun.component';
 // import Friend from '../../pages/friends/profile';
@@ -13,12 +14,14 @@ import Login from './auth/loginComponent';
 import AuthRoute from './auth/AuthRoute';
 import PrivateRoute from './auth/PrivateRoute';
 
-const HomePage = () => <div>This is a Home Page</div>;
+// const HomePage = () => <div>This is a Home Page</div>;
+import HomePage from './Home/Home';
 
 const Routes = (props) => (
   <>
     <Switch>
-      {/* <Route path="/" exact component={HomePage} /> */}
+      <Route path="/home" exact component={HomePage} />
+      <Route path="/" exact component={Dashboard} />
       {/* <Route path="/inbox">
         <Inbox />
       </Route> */}
