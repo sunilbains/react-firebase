@@ -1,6 +1,8 @@
 import React, { useEffect } from 'react';
 import PropTypes from 'prop-types';
 import { connect, useDispatch } from 'react-redux';
+import Header from '../partials/Header';
+import Sidebar from '../partials/Sidebar';
 import { getUsers } from '../../store/actions/UserAction';
 
 const ListUsers = (props) => {
@@ -15,8 +17,20 @@ const ListUsers = (props) => {
 
   return (
     <>
-      Hello users
-      {users.length ? renderusers() : ''}
+      <div id="wrapper">
+        <Sidebar />
+        <Header />
+        <section id="content-wrapper">
+          <div className="row">
+            <h2 className="content-title">Users</h2>
+            <div className="main">
+              <div className="col-md-6 col-sm-12">
+                {users.length ? renderusers() : ''}
+              </div>
+            </div>
+          </div>
+        </section>
+      </div>
     </>
   );
 };

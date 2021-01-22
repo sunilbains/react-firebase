@@ -9,7 +9,6 @@ const Login = (props) => {
 
   const onSubmit = async (values) => {
     setLoading(true);
-    console.log('values', values);
     const res = await fetch(`${API_URL}/auth/login`, {
       method: 'POST',
       headers: {
@@ -30,48 +29,70 @@ const Login = (props) => {
 
   return (
     <>
-      <div className="form-layout">
-        <form onSubmit={handleSubmit(onSubmit)} autoComplete="off">
-          <input
-            name="email"
-            type="text"
-            ref={register({
-              required: {
-                value: true,
-                message: 'Please enter an email address',
-              },
-              pattern: {
-                value: Regex.email,
-                message: 'Email address must be a valid email',
-              },
-            })}
-          />
-          <span className="error-style">
-            {errors.email && errors.email.message}
-          </span>
-
-          <input
-            name="password"
-            type="password"
-            ref={register({
-              required: {
-                value: true,
-                message: 'Please enter a password',
-              },
-              pattern: {
-                value: Regex.password,
-                message: 'Password must be a valid',
-              },
-            })}
-          />
-          <span className="error-style">
-            {errors.password && errors.password.message}
-          </span>
-          <button type="submit" className="primary-btn signup-btn">
-            {loading ? 'Loading...' : 'Login'}{' '}
-            <i className="material-icons right">send</i>
-          </button>
-        </form>
+      <div id="wrapper">
+        <section id="content-wrapper">
+          <div className="row">
+            <div className="col-lg-12">
+              <h2 className="content-title">Test</h2>
+              <div className="main">
+                <div className="col-md-6 col-sm-12">
+                  <div className="login-form">
+                    <form onSubmit={handleSubmit(onSubmit)} autoComplete="off">
+                      <div className="form-group">
+                        <label>Email Address</label>
+                        <input
+                          name="email"
+                          type="email"
+                          className="form-control"
+                          placeholder="Email Address"
+                          ref={register({
+                            required: {
+                              value: true,
+                              message: 'Please enter an email address',
+                            },
+                            pattern: {
+                              value: Regex.email,
+                              message: 'Email address must be a valid email',
+                            },
+                          })}
+                        />
+                        <span className="error-style">
+                          {errors.email && errors.email.message}
+                        </span>
+                      </div>
+                      <div className="form-group">
+                        <label>Password</label>
+                        <input
+                          name="password"
+                          type="password"
+                          className="form-control"
+                          placeholder="Password"
+                          ref={register({
+                            required: {
+                              value: true,
+                              message: 'Please enter a password',
+                            },
+                            pattern: {
+                              value: Regex.password,
+                              message: 'Password must be a valid',
+                            },
+                          })}
+                        />
+                        <span className="error-style">
+                          {errors.password && errors.password.message}
+                        </span>
+                      </div>
+                      <button type="submit" className="btn btn-secondary">
+                        {loading ? 'Loading...' : 'Login'}{' '}
+                        <i className="material-icons right">send</i>
+                      </button>
+                    </form>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </section>
       </div>
     </>
   );
