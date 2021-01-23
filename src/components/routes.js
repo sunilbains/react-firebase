@@ -1,6 +1,7 @@
 import React from 'react';
 import { Switch } from 'react-router';
 import ListUsers from './users/ListUsers';
+import ListEmployees from './Employees/ListEmployees';
 import Login from './auth/loginComponent';
 import Register from './auth/RegisterComponent';
 import Dashboard from './Dashboard/dashboard';
@@ -13,7 +14,8 @@ const Routes = () => (
     <Switch>
       <PrivateRoute path="/home" exact component={HomePage} />
       <PrivateRoute path="/" exact component={Dashboard} />
-      <PrivateRoute component={ListUsers} path="/users" exact />
+      <PrivateRoute path="/users" component={ListUsers} exact />
+      <PrivateRoute path="/employees" component={ListEmployees} exact />
       <AuthRoute component={Login} path="/login" exact />
       <AuthRoute component={Register} path="/register" exact />
     </Switch>

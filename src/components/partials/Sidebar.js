@@ -13,22 +13,31 @@ const Sidebar = () => (
         </div>
       </div>
       <ul className="sidebar-nav">
-        <li className="active">
+        <li
+          className={
+            window.location.pathname === '/' ||
+            window.location.pathname === '/home'
+              ? 'active'
+              : ''
+          }
+        >
           <Link to="/home">
             <i className="fa fa-home" />
             Home
           </Link>
         </li>
-        <li>
+        <li className={window.location.pathname === '/users' ? 'active' : ''}>
           <Link to="/users">
             <i className="fa fa-user" />
             Users
           </Link>
         </li>
-        <li>
-          <Link to="/">
-            <i className="fa fa-plug" />
-            Plugins
+        <li
+          className={window.location.pathname === '/employees' ? 'active' : ''}
+        >
+          <Link to="/employees">
+            <i className="fa fa-user" />
+            Employees
           </Link>
         </li>
       </ul>

@@ -34,7 +34,7 @@ const Header = () => {
                 </li>
                 <li className="nav-item dropdown">
                   <a
-                    className="nav-link dropdown-toggle"
+                    className="nav-link"
                     href="/"
                     id="navbarDropdownMenuLink"
                     role="button"
@@ -42,7 +42,7 @@ const Header = () => {
                     aria-haspopup="true"
                     aria-expanded="false"
                   >
-                    Account
+                    <i className="fa fa-ellipsis-v" aria-hidden="true" />
                   </a>
                   <div
                     className="dropdown-menu dropdown-menu-right"
