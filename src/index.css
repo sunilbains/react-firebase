@@ -61,7 +61,7 @@ a:focus {
 
 .sidebar-nav {
   position: absolute;
-  top: 75px;
+  top: 110px;
   width: 250px;
   margin: 0;
   padding: 0;
@@ -357,4 +357,30 @@ a:focus {
   margin-top: 8%;
   margin-bottom: -15%;
   color: #495057;
+}
+.notification {
+  background-color: #555;
+  color: white;
+  text-decoration: none;
+  padding: 15px 26px;
+  position: relative;
+  display: inline-block;
+  border-radius: 2px;
+}
+
+.notification:hover {
+  background: rgb(221, 216, 216);
+}
+
+.notification .not-count {
+  position: absolute;
+  top: -1px;
+  right: 7px;
+  padding: 0px 6px;
+  border-radius: 50%;
+  background: rgb(223, 169, 98);
+  color: white;
+}
+.error-style {
+  color: red;
 }

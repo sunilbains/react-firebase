@@ -1,6 +1,8 @@
 import React, { useState } from 'react';
 import { useForm } from 'react-hook-form';
 import Swal from 'sweetalert2';
+import { Link } from 'react-router-dom';
+import { Spinner } from 'reactstrap';
 import { API_URL, Regex } from '../../constants/config';
 
 const Login = (props) => {
@@ -25,6 +27,7 @@ const Login = (props) => {
     } else if (data.status === 401 || data.status === 404) {
       Swal.fire('Oops...', data.message, 'error');
     }
+    setLoading(false);
   };
 
   return (
@@ -33,7 +36,7 @@ const Login = (props) => {
         <section id="content-wrapper">
           <div className="row">
             <div className="col-lg-12">
-              <h2 className="content-title">Test</h2>
+              <h3 className="content-title">Login Form</h3>
               <div className="main">
                 <div className="col-md-6 col-sm-12">
                   <div className="login-form">
@@ -48,17 +51,20 @@ const Login = (props) => {
                           ref={register({
                             required: {
                               value: true,
-                              message: 'Please enter an email address',
+                              message: 'Please enter an email address.',
                             },
                             pattern: {
                               value: Regex.email,
-                              message: 'Email address must be a valid email',
+                              message: 'Email address must be a valid email.',
                             },
                           })}
                         />
                         <span className="error-style">
                           {errors.email && errors.email.message}
                         </span>
+                        <Link to="register" className="float-right">
+                          Forgot Password?
+                        </Link>
                       </div>
                       <div className="form-group">
                         <label>Password</label>
@@ -70,11 +76,11 @@ const Login = (props) => {
                           ref={register({
                             required: {
                               value: true,
-                              message: 'Please enter a password',
+                              message: 'Please enter a password.',
                             },
                             pattern: {
                               value: Regex.password,
-                              message: 'Password must be a valid',
+                              message: 'Password must be a valid.',
                             },
                           })}
                         />
@@ -82,9 +88,18 @@ const Login = (props) => {
                           {errors.password && errors.password.message}
                         </span>
                       </div>
-                      <button type="submit" className="btn btn-secondary">
-                        {loading ? 'Loading...' : 'Login'}{' '}
-                        <i className="material-icons right">send</i>
+                      <Link to="register">Register</Link>
+                      <button
+                        type="submit"
+                        className="btn btn-secondary float-right"
+                      >
+                        {loading && (
+                          <Spinner
+                            color="primary"
+                            style={{ width: '1.5rem', height: '1.5rem' }}
+                          />
+                        )}{' '}
+                        Login
                       </button>
                     </form>
                   </div>

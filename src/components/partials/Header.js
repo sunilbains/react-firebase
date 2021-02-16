@@ -1,7 +1,15 @@
-import React, { useEffect } from 'react';
+import React, { useEffect, useState } from 'react';
 import { Link } from 'react-router-dom';
+import {
+  ButtonDropdown,
+  DropdownToggle,
+  DropdownMenu,
+  DropdownItem,
+} from 'reactstrap';
 
 const Header = () => {
+  const [dropdownOpen, setOpen] = useState(false);
+
   useEffect(() => {
     const $button = document.querySelector('#sidebar-toggle');
     const $wrapper = document.querySelector('#wrapper');
@@ -22,6 +30,29 @@ const Header = () => {
                 <i className="fa fa-bars" />
               </a>
               <ul className="navbar-nav ml-auto">
+                <ButtonDropdown
+                  isOpen={dropdownOpen}
+                  toggle={() => {
+                    setOpen(!dropdownOpen);
+                  }}
+                >
+                  <DropdownToggle
+                    caret
+                    color="default"
+                    className="text-primary notification"
+                    size="sm"
+                  >
+                    <span className="not-count">4</span>
+                    <i className="fa fa-bell" />
+                  </DropdownToggle>
+                  <DropdownMenu>
+                    <DropdownItem header>Header</DropdownItem>
+                    <DropdownItem disabled>Action</DropdownItem>
+                    <DropdownItem>Another Action</DropdownItem>
+                    <DropdownItem divider />
+                    <DropdownItem>Another Action</DropdownItem>
+                  </DropdownMenu>
+                </ButtonDropdown>
                 <li className="nav-item active">
                   <Link to="/home" className="nav-link">
                     Home <span className="sr-only">(current)</span>

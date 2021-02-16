@@ -3,8 +3,11 @@ import PropTypes from 'prop-types';
 import { connect, useDispatch } from 'react-redux';
 import DataTable from 'react-data-table-component';
 import { Badge } from 'reactstrap';
+import Swal from 'sweetalert2';
+import { Link } from 'react-router-dom';
 import Header from '../partials/Header';
 import Sidebar from '../partials/Sidebar';
+import BreadcrumbCom from '../partials/BreadcrumbCom';
 import { getEmployees } from '../../store/actions/EmployeeAction';
 
 const ListEmployees = (props) => {
@@ -13,6 +16,11 @@ const ListEmployees = (props) => {
   const [currentPage, setCurrentPage] = useState(1);
   const [perPage, setPerPage] = useState(10);
   const { employees, count } = props;
+
+  const BreadItems = [
+    { to: '/', label: 'Dashboard' },
+    { label: 'Employees', to: '/employees', active: true },
+  ];
 
   const columns = useMemo(
     () => [
@@ -40,15 +48,37 @@ const ListEmployees = (props) => {
       {
         cell: () => (
           <>
-            <Badge color="info" title="Edit Employee">
+            <Link
+              to="/"
+              className="nav-link text-success"
+              title="Edit Employee"
+            >
               <i className="fa fa-edit" aria-hidden="true" />
-            </Badge>
-            <Badge color="danger" title="Delete Employee">
+            </Link>
+            <Badge
+              color="danger"
+              title="Delete Employee"
+              onClick={() => {
+                Swal.fire({
+                  title: 'Are you sure?',
+                  text: 'You want to delete this user?',
+                  icon: 'warning',
+                  showCancelButton: true,
+                  confirmButtonText: 'Yes, delete it!',
+                  cancelButtonText: 'Cancel',
+                  cancelButtonColor: '#dd6b55',
+                }).then((result) => {
+                  if (result.value) {
+                    Swal.fire('Deleted!', 'User has been deleted.', 'success');
+                  }
+                });
+              }}
+            >
               <i className="fa fa-trash" aria-hidden="true" />
             </Badge>
           </>
         ),
-        width: '100px',
+        width: '130px',
       },
     ],
     [],
@@ -72,6 +102,10 @@ const ListEmployees = (props) => {
           )
         }
       />
+      <Link to="/" className="btn btn-info btn-sm" title="Edit Employee">
+        <i className="fa fa-plus" aria-hidden="true" />
+        Employee
+      </Link>
     </>
   );
 
@@ -95,7 +129,7 @@ const ListEmployees = (props) => {
         <Sidebar />
         <Header />
         <section id="content-wrapper">
-          <h2 className="content-title">Employees</h2>
+          <BreadcrumbCom items={BreadItems} />
           <div className="main">
             <div className="col-lg-12 col-sm-12">
               <DataTable
