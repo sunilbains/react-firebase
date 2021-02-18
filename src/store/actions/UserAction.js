@@ -31,6 +31,24 @@ export const getUser = (id) => (dispatch) => {
   //   );
 };
 
+// // Get User
+export const addUser = (userData) => (dispatch) => {
+  // console.log('s', id);
+  dispatch({ type: 'ADD_USER', payload: { status: 200, message: 'done' } });
+  // fetch(`https://jsonplaceholder.typicode.com/users`)
+  //   .then((res) => res.json())
+  //   .then((data) => {
+  //     dispatch({ type: 'GET_USER', payload: data });
+  //   })
+  //   .catch((err) =>
+  //     dispatch({
+  //       type: 'GET_ERROR',
+  //       // payload: err.response.data.message
+  //       payload: err,
+  //     }),
+  //   );
+};
+
 // // Set logged in user
 // export const setCurrentUser = (userProfileDetail) => ({
 //   type: 'SET_CURRENT_USER',

@@ -19,7 +19,7 @@ const ListUsers = (props) => {
 
   const BreadItems = [
     { to: '/', label: 'Dashboard' },
-    { label: 'Users', to: '/users', active: true },
+    { to: '/users', label: 'Users', active: true },
   ];
 
   const columns = useMemo(
@@ -60,7 +60,11 @@ const ListUsers = (props) => {
   const filterRows = () => (
     <>
       <input placeholder="Filter by name, email" name="filter" />
-      <Link to="/" className="btn btn-info btn-sm" title="Edit Employee">
+      <Link
+        to="/add-user"
+        className="btn btn-info btn-sm"
+        title="Edit Employee"
+      >
         <i className="fa fa-plus" aria-hidden="true" /> User
       </Link>
     </>
