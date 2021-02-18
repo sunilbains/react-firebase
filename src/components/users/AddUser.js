@@ -36,7 +36,7 @@ const ListUsers = (props) => {
   };
 
   return (
-    <div id="wrapper">
+    <>
       <Sidebar />
       <Header />
       <section id="content-wrapper">
@@ -47,7 +47,7 @@ const ListUsers = (props) => {
           </div>
         </div>
       </section>
-    </div>
+    </>
   );
 };
 

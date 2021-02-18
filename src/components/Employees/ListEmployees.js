@@ -125,7 +125,7 @@ const ListEmployees = (props) => {
 
   return (
     <>
-      <div id="wrapper">
+      <div>
         <Sidebar />
         <Header />
         <section id="content-wrapper">

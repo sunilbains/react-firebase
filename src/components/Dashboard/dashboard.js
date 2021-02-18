@@ -4,18 +4,16 @@ import Header from '../partials/Header';
 
 const Dashboard = () => (
   <>
-    <div id="wrapper">
-      <Sidebar />
-      <Header />
-      <section id="content-wrapper">
-        <div className="row">
-          <h2 className="content-title">Dashboard</h2>
-          <div className="main">
-            <div className="col-md-6 col-sm-12" />
-          </div>
+    <Sidebar />
+    <Header />
+    <section id="content-wrapper">
+      <div className="row">
+        <h2 className="content-title">Dashboard</h2>
+        <div className="main">
+          <div className="col-md-6 col-sm-12" />
         </div>
-      </section>
-    </div>
+      </div>
+    </section>
   </>
 );
 

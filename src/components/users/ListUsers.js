@@ -87,36 +87,34 @@ const ListUsers = (props) => {
   }, [dispatch]);
 
   return (
-    <>
-      <div id="wrapper">
-        <Sidebar />
-        <Header />
-        <section id="content-wrapper">
-          <BreadcrumbCom items={BreadItems} />
-          <div className="main">
-            <div className="col-lg-12 col-sm-12">
-              <DataTable
-                columns={columns}
-                data={users}
-                progressPending={loading}
-                pagination
-                paginationServer
-                paginationTotalRows={totalRows}
-                paginationDefaultPage={currentPage}
-                onChangeRowsPerPage={handlePerRowsChange}
-                onChangePage={handlePageChange}
-                selectableRows
-                subHeader
-                subHeaderComponent={filterRows()}
-                onSelectedRowsChange={({ selectedRows }) =>
-                  console.log(selectedRows)
-                }
-              />
-            </div>
+    <div>
+      <Sidebar />
+      <Header />
+      <section id="content-wrapper">
+        <BreadcrumbCom items={BreadItems} />
+        <div className="main">
+          <div className="col-lg-12 col-sm-12">
+            <DataTable
+              columns={columns}
+              data={users}
+              progressPending={loading}
+              pagination
+              paginationServer
+              paginationTotalRows={totalRows}
+              paginationDefaultPage={currentPage}
+              onChangeRowsPerPage={handlePerRowsChange}
+              onChangePage={handlePageChange}
+              selectableRows
+              subHeader
+              subHeaderComponent={filterRows()}
+              onSelectedRowsChange={({ selectedRows }) =>
+                console.log(selectedRows)
+              }
+            />
           </div>
-        </section>
-      </div>
-    </>
+        </div>
+      </section>
+    </div>
   );
 };
 
