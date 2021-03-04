@@ -8,7 +8,6 @@ import { API_URL, Regex } from '../../constants/config';
 const Login = (props) => {
   const { register, handleSubmit, errors } = useForm();
   const [loading, setLoading] = useState(false);
-
   const onSubmit = async (values) => {
     setLoading(true);
     const res = await fetch(`${API_URL}/auth/login`, {
