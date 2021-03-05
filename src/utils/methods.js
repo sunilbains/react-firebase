@@ -59,14 +59,17 @@ export async function getMethod(url) {
   return res.data;
 }
 
-export function postMethod(url, data) {
-  return true;
+export async function postMethod(url, data) {
+  const res = await axios.post(url, data);
+  return res.data;
 }
 
-export function updateMethod(url, data) {
-  return true;
+export async function updateMethod(url, data) {
+  const res = await axios.put(url, data);
+  return res.data;
 }
 
-export function deleteMethod(url, data) {
-  return true;
+export async function deleteMethod(url, data) {
+  const res = await axios.delete(url, data);
+  return res.data;
 }

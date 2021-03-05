@@ -6,26 +6,31 @@ import Header from '../partials/Header';
 import Sidebar from '../partials/Sidebar';
 import UserFields from './UserFields';
 import BreadcrumbCom from '../partials/BreadcrumbCom';
-import { addUser } from '../../store/actions/UserAction';
+import { getUser, updateUser } from '../../store/actions/UserAction';
 
-const ListUsers = (props) => {
+const EditUser = (props) => {
   const dispatch = useDispatch();
   const [loading, setLoading] = useState(false);
-  const { newUser, errors, history } = props;
+  const { user, errors, updatedUser, history } = props;
 
   const BreadItems = [
     { to: '/', label: 'Dashboard' },
     { to: '/users', label: 'Users' },
-    { to: '/add-user', label: 'Add User', active: true },
+    { to: '/users', label: 'Edit User', active: true },
   ];
 
   useEffect(() => {
-    if (Object.values(newUser).length) {
+    dispatch(getUser(props.match.params.id));
+  }, [dispatch, props.match.params]);
+
+  useEffect(() => {
+    if (Object.values(updatedUser).length) {
       setLoading(false);
-      dispatch({ type: 'ADD_USER', payload: {} });
+      dispatch({ type: 'UPDATE_USER', payload: {} });
+      dispatch({ type: 'GET_USER', payload: {} });
       Swal.fire({
         title: 'Success!!',
-        text: newUser.message,
+        text: updatedUser.message,
         icon: 'success',
       }).then((res) => {
         if (res) {
@@ -38,13 +43,12 @@ const ListUsers = (props) => {
       Swal.fire('Warning!!', errors.message, 'warning');
       dispatch({ type: 'GET_ERRORS', payload: {} });
     }
-  }, [newUser, errors, dispatch, history]);
+  }, [user, errors, updatedUser, dispatch, history]);
 
   const onSubmit = (values) => {
     setLoading(true);
-    delete values.confirmPassword;
-    console.log('submit', values);
-    dispatch(addUser(values));
+    console.log('update', values);
+    dispatch(updateUser(props.match.params.id, values));
   };
 
   return (
@@ -55,7 +59,7 @@ const ListUsers = (props) => {
         <BreadcrumbCom items={BreadItems} />
         <div className="main">
           <div className="col-lg-12 col-sm-12">
-            <UserFields user={{}} onSubmit={onSubmit} loading={loading} />
+            <UserFields user={user} onSubmit={onSubmit} loading={loading} />
           </div>
         </div>
       </section>
@@ -64,19 +68,24 @@ const ListUsers = (props) => {
 };
 
 const mapStateToProps = (state) => ({
-  newUser: state.users.addUser,
+  user: state.users.getUser,
+  updatedUser: state.users.updateUser,
   errors: state.errors,
 });
 
-ListUsers.propTypes = {
-  newUser: PropTypes.shape({
+EditUser.propTypes = {
+  user: PropTypes.shape({
+    status: PropTypes.string,
+    message: PropTypes.string,
+  }).isRequired,
+  updatedUser: PropTypes.shape({
     status: PropTypes.number,
     message: PropTypes.string,
   }).isRequired,
   errors: PropTypes.shape({
-    status: PropTypes.string,
+    status: PropTypes.number,
     message: PropTypes.string,
   }).isRequired,
 };
 
-export default connect(mapStateToProps, { addUser })(ListUsers);
+export default connect(mapStateToProps, { getUser })(EditUser);

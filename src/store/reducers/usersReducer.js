@@ -15,7 +15,7 @@ const users = (state = authState, action) => {
     case 'ADD_USER':
       return { ...state, addUser: action.payload };
     case 'UPDATE_USER':
-      return { ...state, addUser: action.payload };
+      return { ...state, updateUser: action.payload };
     case 'DELETE_USER':
       return { ...state, deleteUser: action.payload };
     default:

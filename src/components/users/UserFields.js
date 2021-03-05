@@ -4,23 +4,25 @@ import { useForm } from 'react-hook-form';
 import { Spinner } from 'reactstrap';
 
 const UserFields = ({ user, onSubmit, loading }) => {
-  const { register, handleSubmit, errors } = useForm();
+  const { register, handleSubmit, errors, getValues, setValue } = useForm();
 
   useEffect(() => {
-    // if (Object.values(user).length) {
-    // }
-  }, [user]);
+    if (Object.values(user).length) {
+      setValue('gender', user.gender);
+    }
+  }, [user, setValue]);
 
   return (
     <form onSubmit={handleSubmit(onSubmit)} autoComplete="off">
       <div className="col-12">
         <div className="row">
           <div className="form-group col-12">
-            <label htmlFor="exampleFormControlFile1">Example file input</label>
+            <label htmlFor="exampleFormControlFile1">Profile Image</label>
             <input
               type="file"
               className="form-control-file"
               id="exampleFormControlFile1"
+              name="image"
             />
           </div>
           <div className="col-4">
@@ -36,65 +38,10 @@ const UserFields = ({ user, onSubmit, loading }) => {
                   })}
                   name="name"
                   id="full_name"
+                  defaultValue={user.name}
                 />
                 <span className="error-style">
                   {errors.name && errors.name.message}
-                </span>
-              </div>
-            </div>
-          </div>
-          <div className="col-4">
-            <div className="form-group">
-              <label htmlFor="exampleFormControlInput1">Email address</label>
-              <input
-                type="text"
-                placeholder="Email address"
-                className="form-control"
-                name="email"
-                id="email"
-                ref={register({
-                  required: 'Email Address is required.',
-                })}
-              />
-              <span className="error-style">
-                {errors.email && errors.email.message}
-              </span>
-            </div>
-          </div>
-          <div className="col-4">
-            <div className="form-group">
-              <label htmlFor="password">Password</label>
-              <input
-                type="text"
-                name="password"
-                id="password"
-                className="form-control"
-                placeholder="Password"
-                ref={register({ required: 'Password is required.' })}
-              />
-              <span className="error-style">
-                {errors.password && errors.password.message}
-              </span>
-            </div>
-          </div>
-        </div>
-        <div className="row">
-          <div className="col-4">
-            <div className="form-group">
-              <label htmlFor="confirmPassword">Confirm Password</label>
-              <div className="form-group">
-                <input
-                  type="text"
-                  className="form-control"
-                  placeholder="Confirm Password"
-                  ref={register({
-                    required: 'Confirm Password is required.',
-                  })}
-                  name="confirmPassword"
-                  id="confirmPassword"
-                />
-                <span className="error-style">
-                  {errors.confirmPassword && errors.confirmPassword.message}
                 </span>
               </div>
             </div>
@@ -111,6 +58,7 @@ const UserFields = ({ user, onSubmit, loading }) => {
                 ref={register({
                   required: 'Country Code is required.',
                 })}
+                defaultValue={user.countryCode}
               />
               <span className="error-style">
                 {errors.countryCode && errors.countryCode.message}
@@ -127,12 +75,79 @@ const UserFields = ({ user, onSubmit, loading }) => {
                 className="form-control"
                 placeholder="Phone number"
                 ref={register({ required: 'Phone number is required.' })}
+                defaultValue={user.phone}
               />
               <span className="error-style">
                 {errors.phone && errors.phone.message}
               </span>
             </div>
           </div>
+        </div>
+        <div className="row">
+          {Object.values(user).length > 0 || (
+            <>
+              <div className="col-4">
+                <div className="form-group">
+                  <label htmlFor="exampleFormControlInput1">
+                    Email address
+                  </label>
+                  <input
+                    type="text"
+                    placeholder="Email address"
+                    className="form-control"
+                    name="email"
+                    id="email"
+                    ref={register({
+                      required: 'Email Address is required.',
+                    })}
+                    defaultValue={user.email}
+                  />
+                  <span className="error-style">
+                    {errors.email && errors.email.message}
+                  </span>
+                </div>
+              </div>
+              <div className="col-4">
+                <div className="form-group">
+                  <label htmlFor="password">Password</label>
+                  <input
+                    type="text"
+                    name="password"
+                    id="password"
+                    className="form-control"
+                    placeholder="Password"
+                    ref={register({ required: 'Password is required.' })}
+                  />
+                  <span className="error-style">
+                    {errors.password && errors.password.message}
+                  </span>
+                </div>
+              </div>
+              <div className="col-4">
+                <div className="form-group">
+                  <label htmlFor="confirmPassword">Confirm Password</label>
+                  <div className="form-group">
+                    <input
+                      type="text"
+                      className="form-control"
+                      placeholder="Confirm Password"
+                      ref={register({
+                        required: 'Confirm Password is required.',
+                        validate: (value) =>
+                          value === getValues('password') ||
+                          'The passwords do not match',
+                      })}
+                      name="confirmPassword"
+                      id="confirmPassword"
+                    />
+                    <span className="error-style">
+                      {errors.confirmPassword && errors.confirmPassword.message}
+                    </span>
+                  </div>
+                </div>
+              </div>
+            </>
+          )}
         </div>
         <div className="row">
           <div className="col-4">
@@ -146,6 +161,8 @@ const UserFields = ({ user, onSubmit, loading }) => {
                   required: 'City is required.',
                 })}
                 name="city"
+                id="city"
+                defaultValue={user.city}
               />
               <span className="error-style">
                 {errors.city && errors.city.message}
@@ -158,14 +175,99 @@ const UserFields = ({ user, onSubmit, loading }) => {
               <input
                 type="text"
                 name="state"
+                id="state"
                 className="form-control"
                 placeholder="State"
                 ref={register({
                   required: 'State is required.',
                 })}
+                defaultValue={user.state}
               />
               <span className="error-style">
                 {errors.state && errors.state.message}
+              </span>
+            </div>
+          </div>
+          <div className="col-4">
+            <div className="form-group">
+              <label htmlFor="country">Country</label>
+              <input
+                type="text"
+                name="country"
+                id="country"
+                className="form-control"
+                placeholder="Country"
+                ref={register({ required: 'Country is required.' })}
+                defaultValue={user.country}
+              />
+              <span className="error-style">
+                {errors.country && errors.country.message}
+              </span>
+            </div>
+          </div>
+        </div>
+        <div className="row">
+          <div className="col-4">
+            <div className="form-group">
+              <label htmlFor="exampleRadios1">Gender</label>
+            </div>
+            <div className="form-check form-check-inline">
+              <input
+                className="form-check-input"
+                type="radio"
+                name="gender"
+                id="male"
+                value="male"
+                ref={register({ required: 'Gender is required.' })}
+              />
+              <label className="form-check-label" htmlFor="male">
+                Male
+              </label>
+            </div>
+            <div className="form-check form-check-inline">
+              <input
+                className="form-check-input"
+                type="radio"
+                name="gender"
+                id="female"
+                value="female"
+                ref={register({ required: 'Gender is required.' })}
+              />
+              <label className="form-check-label" htmlFor="female">
+                Female
+              </label>
+            </div>
+            <div className="form-check form-check-inline">
+              <input
+                className="form-check-input"
+                type="radio"
+                name="gender"
+                id="other"
+                value="other"
+                ref={register({ required: 'Gender is required.' })}
+              />
+              <label className="form-check-label" htmlFor="other">
+                Other
+              </label>
+            </div>
+            <span className="error-style">
+              {errors.gender && errors.gender.message}
+            </span>
+          </div>
+          <div className="col-4">
+            <div className="form-group">
+              <label htmlFor="dob">DOB</label>
+              <input
+                type="text"
+                name="dob"
+                id="dob"
+                className="form-control"
+                placeholder="DOB"
+                ref={register({ required: 'DOB is required.' })}
+                defaultValue={user.dob}
+              />
+              <span className="error-style">
+                {errors.dob && errors.dob.message}
               </span>
             </div>
           </div>
@@ -178,71 +280,15 @@ const UserFields = ({ user, onSubmit, loading }) => {
                 className="form-control"
                 placeholder="Zip Code"
                 ref={register({ required: 'Zip Code is required.' })}
+                defaultValue={user.zipCode}
               />
               <span className="error-style">
                 {errors.zipCode && errors.zipCode.message}
               </span>
             </div>
           </div>
-          <div className="row">
-            <div className="form-check">
-              {/* <input
-                className="form-check-input"
-                type="radio"
-                name="exampleRadios"
-                id="exampleRadios1"
-                value="option1"
-                checked
-              /> */}
-              <label className="form-check-label" htmlFor="exampleRadios1">
-                Default radio
-              </label>
-            </div>
-            <div className="form-check">
-              <input
-                className="form-check-input"
-                type="radio"
-                name="exampleRadios"
-                id="exampleRadios2"
-                value="option2"
-              />
-              <label className="form-check-label" htmlFor="exampleRadios2">
-                Second default radio
-              </label>
-            </div>
-            <div className="form-check">
-              <input
-                className="form-check-input"
-                type="radio"
-                name="exampleRadios"
-                id="exampleRadios3"
-                value="option3"
-                disabled
-              />
-              <label className="form-check-label" htmlFor="exampleRadios3">
-                Disabled radio
-              </label>
-            </div>
-          </div>
         </div>
-        <div className="row">
-          <div className="col-4">
-            <div className="form-group">
-              <label htmlFor="dob">DOB</label>
-              <input
-                type="text"
-                name="dob"
-                id="dob"
-                className="form-control"
-                placeholder="Zip Code"
-                ref={register({ required: 'Zip Code is required.' })}
-              />
-              <span className="error-style">
-                {errors.dob && errors.dob.message}
-              </span>
-            </div>
-          </div>
-        </div>
+        <div className="row" />
         <button type="submit" className="btn btn-secondary float-right">
           {loading && (
             <Spinner
@@ -259,7 +305,7 @@ const UserFields = ({ user, onSubmit, loading }) => {
 
 UserFields.propTypes = {
   user: PropTypes.shape({
-    status: PropTypes.number,
+    status: PropTypes.string,
     message: PropTypes.string,
   }).isRequired,
 };

@@ -2,6 +2,7 @@ import React from 'react';
 import { Switch } from 'react-router';
 import ListUsers from './users/ListUsers';
 import AddUser from './users/AddUser';
+import EditUser from './users/EditUser';
 import ListEmployees from './Employees/ListEmployees';
 import Login from './auth/loginComponent';
 import Register from './auth/RegisterComponent';
@@ -16,6 +17,7 @@ const Routes = () => (
       <PrivateRoute path="/home" exact component={HomePage} />
       <PrivateRoute path="/" exact component={Dashboard} />
       <PrivateRoute path="/users" component={ListUsers} exact />
+      <PrivateRoute path="/users/:id" component={EditUser} exact />
       <PrivateRoute path="/add-user" component={AddUser} exact />
       <PrivateRoute path="/employees" component={ListEmployees} exact />
       <AuthRoute component={Login} path="/login" exact />

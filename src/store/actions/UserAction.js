@@ -1,65 +1,70 @@
-import { getMethod } from '../../utils/methods';
+import {
+  getMethod,
+  postMethod,
+  updateMethod,
+  deleteMethod,
+} from '../../utils/methods';
 import { API_URL } from '../../constants/config';
 
 export const getUsers = () => async (dispatch) => {
-  const rr = await getMethod(`${API_URL}/users`);
+  const res = await getMethod(`${API_URL}/users`);
 
-  if (rr.status === 200) {
-    return dispatch({ type: 'GET_USERS', payload: rr.data });
+  if (res.status === 200) {
+    return dispatch({ type: 'GET_USERS', payload: res.data });
   }
-  if (rr.status === 400 || rr.status === 500) {
-    return dispatch({ type: 'GET_ERRORS', payload: rr });
+  if (res.status === 400 || res.status === 500) {
+    return dispatch({ type: 'GET_ERRORS', payload: res });
   }
   return true;
 };
 
-// // Get User
-export const getUser = (id) => (dispatch) => {
-  // console.log('s', id);
-  dispatch({ type: 'GET_USER', payload: id });
-  // fetch(`https://jsonplaceholder.typicode.com/users`)
-  //   .then((res) => res.json())
-  //   .then((data) => {
-  //     dispatch({ type: 'GET_USER', payload: data });
-  //   })
-  //   .catch((err) =>
-  //     dispatch({
-  //       type: 'GET_ERROR',
-  //       // payload: err.response.data.message
-  //       payload: err,
-  //     }),
-  //   );
+export const getUser = (id) => async (dispatch) => {
+  const res = await getMethod(`${API_URL}/users/${id}`);
+
+  if (res.status === 200) {
+    return dispatch({ type: 'GET_USER', payload: res.data });
+  }
+  if (res.status === 400 || res.status === 500) {
+    return dispatch({ type: 'GET_ERRORS', payload: res });
+  }
+  return true;
 };
 
-// // Get User
-export const addUser = (userData) => (dispatch) => {
-  // console.log('s', id);
-  dispatch({ type: 'ADD_USER', payload: { status: 200, message: 'done' } });
-  // fetch(`https://jsonplaceholder.typicode.com/users`)
-  //   .then((res) => res.json())
-  //   .then((data) => {
-  //     dispatch({ type: 'GET_USER', payload: data });
-  //   })
-  //   .catch((err) =>
-  //     dispatch({
-  //       type: 'GET_ERROR',
-  //       // payload: err.response.data.message
-  //       payload: err,
-  //     }),
-  //   );
+export const addUser = (userData) => async (dispatch) => {
+  const res = await postMethod(`${API_URL}/add-user`, userData);
+
+  if (res.status === 200) {
+    return dispatch({ type: 'ADD_USER', payload: res });
+  }
+  if (res.status === 400 || res.status === 500 || res.status === 404) {
+    return dispatch({ type: 'GET_ERRORS', payload: res });
+  }
+  return true;
 };
 
-// // Set logged in user
-// export const setCurrentUser = (userProfileDetail) => ({
-//   type: 'SET_CURRENT_USER',
-//   payload: userProfileDetail,
-// });
+export const updateUser = (id, userData) => async (dispatch) => {
+  const res = await updateMethod(`${API_URL}/users/${id}`, userData);
 
-// // Set user auth true
-// export const setAuthTrue = (payload) => ({
-//   type: 'SET_AUTH_TRUE',
-//   payload,
-// });
+  if (res.status === 200) {
+    return dispatch({ type: 'UPDATE_USER', payload: res });
+  }
+  if (res.status === 400 || res.status === 500 || res.status === 404) {
+    return dispatch({ type: 'GET_ERRORS', payload: res });
+  }
+  return true;
+};
+
+export const deleteUser = (id) => async (dispatch) => {
+  const res = await deleteMethod(`${API_URL}/users/${id}`);
+
+  if (res.status === 200) {
+    return dispatch({ type: 'DELETE_USER', payload: res });
+  }
+  if (res.status === 400 || res.status === 500 || res.status === 404) {
+    return dispatch({ type: 'GET_ERRORS', payload: res });
+  }
+  return true;
+};
 
 // // Log user out
 // export const logoutUser = (history) => (dispatch) => {
@@ -71,19 +76,3 @@ export const addUser = (userData) => (dispatch) => {
 //   dispatch(setCurrentUser({}));
 //   // history.push('/login');
 // };
-
-// // Clear error
-// export const clearError = () => ({
-//   type: 'CLEAR_ERROR',
-// });
-
-// // Clear success
-// export const clearSuccess = () => ({
-//   type: 'CLEAR_SUCCESS',
-// });
-
-// // empty fetched user
-// export const emptyFetchedUser = () => (dispatch) =>
-//   dispatch({
-//     type: 'EMPTY_FETCHED_USER',
-//   });

@@ -8,19 +8,32 @@ import { Link } from 'react-router-dom';
 import Header from '../partials/Header';
 import Sidebar from '../partials/Sidebar';
 import BreadcrumbCom from '../partials/BreadcrumbCom';
-import { getUsers } from '../../store/actions/UserAction';
+import { getUsers, deleteUser } from '../../store/actions/UserAction';
 
 const ListUsers = (props) => {
   const dispatch = useDispatch();
   const [loading] = useState(false);
   const [totalRows] = useState(0);
   const [currentPage, setCurrentPage] = useState(1);
-  const { users } = props;
+  const { users, deletedUser } = props;
 
   const BreadItems = [
     { to: '/', label: 'Dashboard' },
     { to: '/users', label: 'Users', active: true },
   ];
+
+  const getColor = (gender) => {
+    switch (gender) {
+      case 'male':
+        return 'success';
+      case 'female':
+        return 'warning';
+      case 'other':
+        return 'info';
+      default:
+        return 'danger';
+    }
+  };
 
   const columns = useMemo(
     () => [
@@ -30,22 +43,45 @@ const ListUsers = (props) => {
         sortable: true,
       },
       {
+        name: 'Gender',
+        selector: 'gender',
+        sortable: true,
+        cell: (e) => <Badge color={getColor(e.gender)}>{e.gender}</Badge>,
+      },
+      {
+        name: 'Phone',
+        selector: 'phone',
+        sortable: true,
+      },
+      {
         name: 'Email',
         selector: 'email',
         sortable: true,
       },
       {
         // eslint-disable-next-line react/button-has-type
-        cell: () => (
+        cell: (e) => (
           <>
-            <Link to="/" className="nav-link text-success">
+            <Link to={`/users/${e.id}`} className="nav-link text-success">
               <i className="fa fa-edit" aria-hidden="true" />
             </Link>
             <Badge
               color="danger"
               title="Delete User"
               onClick={() => {
-                Swal.fire('Oops...', 'data.message', 'error');
+                Swal.fire({
+                  icon: 'warning',
+                  title: 'Are you sure?',
+                  text: 'You want to delete this user?',
+                  showConfirmButton: true,
+                  confirmButtonText: 'Yes, delete it!',
+                  showCancelButton: true,
+                  cancelButtonText: 'No, keep it',
+                }).then((confirm) => {
+                  if (confirm.value) {
+                    dispatch(deleteUser(e.id));
+                  }
+                });
               }}
             >
               <i className="fa fa-trash" aria-hidden="true" />
@@ -54,7 +90,7 @@ const ListUsers = (props) => {
         ),
       },
     ],
-    [],
+    [dispatch],
   );
 
   const filterRows = () => (
@@ -81,6 +117,12 @@ const ListUsers = (props) => {
     // fetchUsers(page, newPerPage);
     // setPerPage(page, newPerPage);
   };
+
+  useEffect(() => {
+    if (Object.values(deletedUser).length && deletedUser.status === 200) {
+      dispatch(getUsers());
+    }
+  }, [deletedUser, dispatch]);
 
   useEffect(() => {
     dispatch(getUsers());
@@ -120,6 +162,7 @@ const ListUsers = (props) => {
 
 const mapStateToProps = (state) => ({
   users: state.users.getUsers,
+  deletedUser: state.users.deleteUser,
   errors: state.errors,
 });
 
@@ -129,6 +172,14 @@ ListUsers.propTypes = {
       name: PropTypes.string,
     }),
   ).isRequired,
+  deletedUser: PropTypes.shape({
+    status: PropTypes.number,
+    message: PropTypes.string,
+  }).isRequired,
+  errors: PropTypes.shape({
+    status: PropTypes.number,
+    message: PropTypes.string,
+  }).isRequired,
 };
 
-export default connect(mapStateToProps, { getUsers })(ListUsers);
+export default connect(mapStateToProps, { getUsers, deleteUser })(ListUsers);
