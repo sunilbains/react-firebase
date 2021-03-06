@@ -1,4 +1,4 @@
-import React, { useEffect, useState, useMemo } from 'react';
+import React, { useEffect, useState, useMemo, useCallback } from 'react';
 import PropTypes from 'prop-types';
 import { connect, useDispatch } from 'react-redux';
 import DataTable from 'react-data-table-component';
@@ -13,9 +13,9 @@ import { getUsers, deleteUser } from '../../store/actions/UserAction';
 const ListUsers = (props) => {
   const dispatch = useDispatch();
   const [loading] = useState(false);
-  const [totalRows] = useState(0);
   const [currentPage, setCurrentPage] = useState(1);
-  const { users, deletedUser } = props;
+  const [perPage, setPerPage] = useState(10);
+  const { users, deletedUser, count } = props;
 
   const BreadItems = [
     { to: '/', label: 'Dashboard' },
@@ -59,6 +59,10 @@ const ListUsers = (props) => {
         sortable: true,
       },
       {
+        name: 'DOB',
+        selector: 'dob',
+      },
+      {
         // eslint-disable-next-line react/button-has-type
         cell: (e) => (
           <>
@@ -93,9 +97,24 @@ const ListUsers = (props) => {
     [dispatch],
   );
 
+  const fetchEmployees = useCallback(
+    (query) => {
+      dispatch(getUsers(query));
+    },
+    [dispatch],
+  );
+
   const filterRows = () => (
     <>
-      <input placeholder="Filter by name, email" name="filter" />
+      <input
+        placeholder="Filter by name, email"
+        name="filter"
+        onKeyUp={(e) =>
+          fetchEmployees(
+            `page=${currentPage}&limit=${perPage}&filter=${e.target.value}`,
+          )
+        }
+      />
       <Link
         to="/add-user"
         className="btn btn-info btn-sm"
@@ -107,13 +126,16 @@ const ListUsers = (props) => {
   );
 
   const handlePageChange = (page) => {
-    console.log('pafe', page);
+    // console.log('pafe', page);
     // fetchUsers(page);
     setCurrentPage(page);
+    fetchEmployees(`page=${page}&limit=${perPage}`);
   };
 
   const handlePerRowsChange = async (newPerPage, page) => {
-    console.log('pafe newPerPage', newPerPage, page);
+    // console.log('pafe newPerPage', newPerPage, page);
+    setPerPage(newPerPage);
+    fetchEmployees(`page=${page}&limit=${perPage}`);
     // fetchUsers(page, newPerPage);
     // setPerPage(page, newPerPage);
   };
@@ -125,8 +147,9 @@ const ListUsers = (props) => {
   }, [deletedUser, dispatch]);
 
   useEffect(() => {
-    dispatch(getUsers());
-  }, [dispatch]);
+    fetchEmployees(`page=${currentPage}&limit=${perPage}`);
+    // dispatch(getUsers());
+  }, [fetchEmployees, currentPage, perPage]);
 
   return (
     <div>
@@ -142,7 +165,7 @@ const ListUsers = (props) => {
               progressPending={loading}
               pagination
               paginationServer
-              paginationTotalRows={totalRows}
+              paginationTotalRows={count}
               paginationDefaultPage={currentPage}
               onChangeRowsPerPage={handlePerRowsChange}
               onChangePage={handlePageChange}
@@ -161,7 +184,8 @@ const ListUsers = (props) => {
 };
 
 const mapStateToProps = (state) => ({
-  users: state.users.getUsers,
+  users: state.users.getUsers.users,
+  count: state.users.getUsers.count,
   deletedUser: state.users.deleteUser,
   errors: state.errors,
 });

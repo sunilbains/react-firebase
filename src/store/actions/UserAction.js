@@ -6,8 +6,8 @@ import {
 } from '../../utils/methods';
 import { API_URL } from '../../constants/config';
 
-export const getUsers = () => async (dispatch) => {
-  const res = await getMethod(`${API_URL}/users`);
+export const getUsers = (query) => async (dispatch) => {
+  const res = await getMethod(`${API_URL}/users?${query}`);
 
   if (res.status === 200) {
     return dispatch({ type: 'GET_USERS', payload: res.data });

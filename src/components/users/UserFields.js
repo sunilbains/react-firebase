@@ -1,14 +1,24 @@
 import React, { useEffect } from 'react';
 import PropTypes from 'prop-types';
-import { useForm } from 'react-hook-form';
+import DatePicker from 'react-datepicker';
+import { useForm, Controller } from 'react-hook-form';
 import { Spinner } from 'reactstrap';
+import 'react-datepicker/dist/react-datepicker.css';
 
 const UserFields = ({ user, onSubmit, loading }) => {
-  const { register, handleSubmit, errors, getValues, setValue } = useForm();
+  const {
+    register,
+    handleSubmit,
+    errors,
+    getValues,
+    setValue,
+    control,
+  } = useForm();
 
   useEffect(() => {
     if (Object.values(user).length) {
       setValue('gender', user.gender);
+      setValue('dob', new Date(user.dob));
     }
   }, [user, setValue]);
 
@@ -257,15 +267,31 @@ const UserFields = ({ user, onSubmit, loading }) => {
           <div className="col-4">
             <div className="form-group">
               <label htmlFor="dob">DOB</label>
-              <input
-                type="text"
+              {/* </div> */}
+              {/* <div className="form-group"> */}
+              <br />
+              <Controller
+                control={control}
                 name="dob"
-                id="dob"
-                className="form-control"
-                placeholder="DOB"
-                ref={register({ required: 'DOB is required.' })}
-                defaultValue={user.dob}
+                defaultValue=""
+                rules={{ required: 'DOB is required.' }}
+                render={({ onChange, onBlur, value }) => (
+                  <DatePicker
+                    id="dob"
+                    className="form-control"
+                    selected={value}
+                    maxDate={new Date()}
+                    showYearDropdown
+                    showMonthDropdown
+                    onBlur={onBlur}
+                    peekNextMonth
+                    dateFormat="yyyy-MM-dd"
+                    dropdownMode="select"
+                    onChange={onChange}
+                  />
+                )}
               />
+
               <span className="error-style">
                 {errors.dob && errors.dob.message}
               </span>

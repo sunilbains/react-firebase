@@ -1,5 +1,5 @@
 const authState = {
-  getUsers: [],
+  getUsers: { users: [], count: 0 },
   getUser: {},
   addUser: {},
   updateUser: {},
